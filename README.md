@@ -3,6 +3,8 @@ MAX7219
 Copyright(c) 2018 BitBank Software, Inc.<br>
 <br>
 
+![MAX7219 Array](/max7219.gif?raw=true "ATtiny85 Demo")
+
 MAX7219 is a simple C library for working with the Maxim LED matrix
 controllers when connected to the SPI bus.
 The idea is to provide a simple interface for C programmers to make use of 
