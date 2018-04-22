@@ -235,7 +235,7 @@ byte i, *d, bTemp[32];
   for (i=0; i<bNumControllers; i++)
   {
       *d++ = 0x09; // decode mode
-      *d++ = bMode;
+      *d++ = (bMode) ? 0xff : 0x00;
   } // for i
   maxSendSequence(bTemp, bNumControllers * 2); // send the scan limit instructions to all controllers
 } /* maxSetSegmentMode() */
@@ -297,6 +297,45 @@ byte i, *d, bTemp[32];
   maxSendSequence(bTemp, bNumControllers * 2); // send the scan limit instructions to all controllers
 } /* maxSetLimit() */
 
+//
+// Send an ASCII string of numbers/spaces/decimal points
+// to a 7-segment display
+//
+void maxSegmentString(char *pString)
+{
+unsigned char ucTemp[4];
+int iDigit;
+
+	memset(ucTemp, 0, sizeof(ucTemp));
+	iDigit = 0;
+	while (*pString && iDigit < 8)
+	{
+		ucTemp[0] = 8 - (iDigit & 7); // cmd byte to write
+		if (pString[0] >= '0' && pString[0] <= '9')
+		{
+			ucTemp[1] = *pString++; // store digit
+			if (pString[0] == '.')
+			{
+				ucTemp[1] |= 0x80; // turn on decimal point
+				pString++;
+			}
+		}
+		else
+		{
+			ucTemp[1] = 0xf; // space = all segments off
+			pString++;
+		}
+		iDigit++;
+		maxSendSequence(ucTemp, 2); // need to latch each byte pair
+	}
+	while (iDigit < 8) // blank out remaining digits
+	{
+		ucTemp[0] = 8 - (iDigit & 7);
+		ucTemp[1] = 0xf; // all segments off
+		iDigit++;
+		maxSendSequence(ucTemp, 2);
+	}
+} /* maxSegmentString() */
 //
 // Draw a string of characters into the image buffer
 // Normal characters are 8x8 and drawn on byte boundaries

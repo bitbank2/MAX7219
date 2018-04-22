@@ -5,8 +5,11 @@ Copyright(c) 2018 BitBank Software, Inc.<br>
 
 ![MAX7219 Array](/max7219.gif?raw=true "ATtiny85 Demo")
 
-MAX7219 is a simple C library for working with the Maxim LED matrix
+![7-segment digits](/7segment.jpg?raw=true "7-segment 8-digit")
+
+MAX7219 is a simple C library for working with the Maxim LED
 controllers when connected to the SPI bus or bit-banged on GPIO pins.
+This includes both LED matrices (8x8) and 7-segment digits. 
 The idea is to provide a simple interface for C programmers to make use of 
 those low-cost, cascadable LED controllers without having to read the data sheet or figure
 out SPI programming. When using SPI, the display controller needs an additional control

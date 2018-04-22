@@ -45,6 +45,10 @@ void maxSetTestMode(uint8_t bOn);
 //
 void maxSetLimit(uint8_t bLimit);
 //
+// Send an ASCII string of digits to a 7-segment display
+//
+void maxSegmentString(char *pString);
+//
 // Draw a string of characters into the image buffer
 // Normal characters are 8x8 and drawn on uint8_t boundaries
 // Small characters are 6x8 and drawn on bit boundaries

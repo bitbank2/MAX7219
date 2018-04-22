@@ -27,24 +27,44 @@
 #include <unistd.h>
 #include <max7219.h>
 
+// If you have a 7-segment (n-digit) device, leave this
+// otherwise if you have an set of 8x8 arrays, comment this out
+#define SEVEN_SEGMENT
+
 int main(int argc, char* argv[])
 {
-int rc, i, j, iPitch;
+int rc, iPitch;
+#ifndef SEVEN_SEGMENT
+int i, j;
 char cTemp[64];
+#endif
 uint8_t bImg[40*8];
+int iNumControllers, iSegmentMode;
 
 	iPitch = 40; // bytes per line of image
 	memset(bImg, 0, iPitch*8);
 
+#ifdef SEVEN_SEGMENT
+	iNumControllers = 1;
+	iSegmentMode = 1;
+#else
+	iNumControllers = 4; // assume 4 x 8x8 array
+	iSegmentMode = 0;
+#endif
 	// Initialize the library
 	// num controllers, BCD mode, SPI channel, GPIO pin number for CS
-	rc = maxInit(4, 0, 0, 22);
+	rc = maxInit(iNumControllers, iSegmentMode, 0, 22);
 	if (rc != 0)
 	{
 		printf("Problem initializing max7219\n");
 		return 0;
 	}
+	maxSetIntensity(4);
 
+#ifdef SEVEN_SEGMENT
+	maxSegmentString("3.1415926");
+	usleep(4000000);
+#else
 // Display a message and scroll it to the left (2 iterations)
 	for (i=0; i<2; i++)
 	{
@@ -57,6 +77,7 @@ uint8_t bImg[40*8];
 			usleep(40000);
 		} // for each pixel to scroll
 	} // for each iteration
+#endif // SEVEN_SEGMENT
 	// Quit library and free resources
 	maxShutdown();
 

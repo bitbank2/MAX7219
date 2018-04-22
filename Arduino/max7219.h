@@ -50,6 +50,10 @@ void maxDrawString(char *pString, byte *pImage, byte iPitch, byte bSmall);
 //
 void maxSetLimit(byte bLimit);
 //
+// Send an ASCII string of digits to a 7-segment display
+//
+void maxSegmentString(char *pString);
+//
 // Enable (1) or disable (0) test mode
 // This mode lights up every LED at max brightness
 // It can sometimes power up in test mode
